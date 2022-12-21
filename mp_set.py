@@ -38,13 +38,13 @@ class Ui_Form(object):
         self.runButton.setFont(font)
         self.runButton.setObjectName("runButton")
         # backButton
-        self.backButton = QtWidgets.QCommandLinkButton(Form)
-        self.backButton.setGeometry(QtCore.QRect(0, 0, 31, 41))
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(".\\back.png"),
-                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.backButton.setIcon(icon1)
-        self.backButton.setObjectName("backButton")
+        # self.backButton = QtWidgets.QCommandLinkButton(Form)
+        # self.backButton.setGeometry(QtCore.QRect(0, 0, 31, 41))
+        # icon1 = QtGui.QIcon()
+        # icon1.addPixmap(QtGui.QPixmap(".\\back.png"),
+        #                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # self.backButton.setIcon(icon1)
+        # self.backButton.setObjectName("backButton")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)

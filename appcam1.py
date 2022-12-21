@@ -5,13 +5,13 @@ class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Webcam")
         Form.resize(400, 321)
-        self.commandLinkButton = QtWidgets.QCommandLinkButton(Form)
-        self.commandLinkButton.setGeometry(QtCore.QRect(0, 0, 31, 41))
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(".\\back.png"),
-                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.commandLinkButton.setIcon(icon1)
-        self.commandLinkButton.setObjectName("commandLinkButton")
+        # self.commandLinkButton = QtWidgets.QCommandLinkButton(Form)
+        # self.commandLinkButton.setGeometry(QtCore.QRect(0, 0, 31, 41))
+        # icon1 = QtGui.QIcon()
+        # icon1.addPixmap(QtGui.QPixmap(".\\back.png"),
+        #                 QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # self.commandLinkButton.setIcon(icon1)
+        # self.commandLinkButton.setObjectName("commandLinkButton")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
