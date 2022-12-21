@@ -18,7 +18,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Webcam", "Webcam"))
+        Form.setWindowTitle(_translate("Webcam", "TrainingWebcam"))
 
 
 if __name__ == "__main__":

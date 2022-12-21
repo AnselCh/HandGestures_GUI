@@ -21,22 +21,22 @@ class HUI(QtWidgets.QMainWindow, H_ui):  # APP選單畫面
         super(HUI, self).__init__()
         self.setupUi(self)
         self.APP.clicked.connect(self.goAPP)
-        self.Build.clicked.connect(self.goCAM1)
+        self.Build.clicked.connect(self.goCAM2)
 
     def goAPP(self):
         self.aui = AUI()
         self.aui.show()
-        self.aui.runButton.clicked.connect(self.goCAM2)  # 輸入完參數Run
-
-    def goCAM1(self):
-        self.cam1 = CUI1()
-        self.cam1.show()
+        self.aui.runButton.clicked.connect(self.goCAM1)  # 輸入完參數Run
 
     def goCAM2(self):
         self.cam2 = CUI2()
+        self.cam2.show()
+
+    def goCAM1(self):
+        self.cam1 = CUI1()
         self.aui = AUI()  # Run之後關閉參數畫面
         self.aui.close()
-        self.cam2.show()
+        self.cam1.show()
 
 
 class AUI(QtWidgets.QMainWindow, a_ui):  # APP參數設定畫面(APP)
