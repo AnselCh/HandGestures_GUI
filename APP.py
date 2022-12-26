@@ -1,10 +1,12 @@
 from HandMain import Ui_HandGestures as H_ui
 from mp_set import Ui_Form as a_ui
-from appcam1 import Ui_Form as cam1_ui
-from appcam2 import Ui_Form as cam2_ui
-
-from PyQt5 import QtCore, QtGui, QtWidgets
+from msg import Ui_Form as msg_ui
+from PyQt5 import QtWidgets
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 import sys
+import os
+import csv
 
 
 class Controller():
@@ -22,6 +24,8 @@ class HUI(QtWidgets.QMainWindow, H_ui):  # APP選單畫面
         self.setupUi(self)
         self.APP.clicked.connect(self.goAPP)
         self.Build.clicked.connect(self.goCAM2)
+        self.Label.clicked.connect(self.goLabelCsv)
+        self.Training.clicked.connect(self.goTraining)
 
     def goAPP(self):
         self.aui = AUI()
@@ -29,36 +33,49 @@ class HUI(QtWidgets.QMainWindow, H_ui):  # APP選單畫面
         self.aui.runButton.clicked.connect(self.goCAM1)  # 輸入完參數Run
 
     def goCAM2(self):
-        self.cam2 = CUI2()
-        self.cam2.show()
+        self.cam2 = os.system("python record_gestures.py")
 
     def goCAM1(self):
-        self.cam1 = CUI1()
+        self.datapass()
+        self.cam1 = os.system("python sp_app.py")
         self.aui = AUI()  # Run之後關閉參數畫面
         self.aui.close()
-        self.cam1.show()
+        self.cam1
+
+    def goLabelCsv(self):
+        self.label = os.system("sp_model\keypoint_label.csv")
+        self.aui = AUI()  # Run之後關閉參數畫面
+        self.aui.close()
+        self.label
+
+    def goTraining(self):
+        self.Train = os.system("python temp.py")
+        self.aui = AUI()  # Run之後關閉參數畫面
+        self.aui.close()
+
+    def goMsg(self):
+        self.mui = MUI()
+        self.mui.show()
+
+    def datapass(self):
+        MH = self.aui.spinBox.value()
+        WC = self.aui.spinBox_2.value()
+        data = [str(MH), str(WC)]
+        with open('setting.csv', 'w', newline='') as csvfile:
+            # 寫入欄位名稱
+            writer = csv.writer(csvfile)
+            writer.writerows(data)
 
 
 class AUI(QtWidgets.QMainWindow, a_ui):  # APP參數設定畫面(APP)
     def __init__(self):
         super(AUI, self).__init__()
         self.setupUi(self)
-        self.runButton.clicked.connect(self.goCAM2)
-
-    def goCAM2(self):
-        self.cam2 = CUI2()
-        self.cam2.show()
 
 
-class CUI1(QtWidgets.QMainWindow, cam1_ui):  # APPCAM(參數設定後)
+class MUI(QtWidgets.QMainWindow, msg_ui):
     def __init__(self):
-        super(CUI1, self).__init__()
-        self.setupUi(self)
-
-
-class CUI2(QtWidgets.QMainWindow, cam2_ui):  # TrainCAM
-    def __init__(self):
-        super(CUI2, self).__init__()
+        super(MUI, self).__init__()
         self.setupUi(self)
 
 
