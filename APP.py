@@ -44,12 +44,10 @@ class HUI(QtWidgets.QMainWindow, H_ui):  # APP選單畫面
 
     def goLabelCsv(self):
         self.label = os.system("sp_model\keypoint_label.csv")
-        self.aui = AUI()  # Run之後關閉參數畫面
-        self.aui.close()
         self.label
 
     def goTraining(self):
-        self.Train = os.system("python temp.py")
+        self.Train = os.system("python training.py")
         self.aui = AUI()  # Run之後關閉參數畫面
         self.aui.close()
 
