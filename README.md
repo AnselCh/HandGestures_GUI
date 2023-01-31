@@ -1,3 +1,6 @@
+source code from:https://github.com/Kazuhito00/hand-gesture-recognition-using-mediapipe
+
+
 需要套件:pip install -r requirements.txt  
 
 -----可調參數-----
