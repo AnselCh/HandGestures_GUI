@@ -5,8 +5,8 @@
 device:選擇webcam  
 max_num_hands:偵測手部數量  
 width,height  
-min_detection_confidence: 0＼~1  
-min_tracking_confidence : 0＼~1  
+min_detection_confidence: 0|~1  
+min_tracking_confidence : 0|~1  
 
 ----------------
 主程式: sp_app.py  
