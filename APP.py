@@ -30,17 +30,25 @@ class HUI(QtWidgets.QMainWindow, H_ui):  # APP選單畫面
     def goAPP(self):
         self.aui = AUI()
         self.aui.show()
+
         self.aui.runButton.clicked.connect(self.goCAM1)  # 輸入完參數Run
+
+    def goCAM1(self):
+
+        w = self.aui.spinBox.value()
+        h = self.aui.spinBox_2.value()
+        # 將設定偵測手的數量、鏡頭轉存到CSV檔
+        csv_path = 'setting.csv'
+        with open(csv_path, 'a', newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow([w, h])
+        print('寫入setting.csv成功')
+        self.aui.close()  # 存檔後關閉
+
+        self.cam1 = os.system("python sp_app.py")  # 執行
 
     def goCAM2(self):
         self.cam2 = os.system("python record_gestures.py")
-
-    def goCAM1(self):
-        self.datapass()
-        self.cam1 = os.system("python sp_app.py")
-        self.aui = AUI()  # Run之後關閉參數畫面
-        self.aui.close()
-        self.cam1
 
     def goLabelCsv(self):
         self.label = os.system("sp_model\keypoint_label.csv")
