@@ -19,7 +19,8 @@ from sp_model import PointHistoryClassifier
 def get_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--device", type=int, default=0)  # 鏡頭
+    # parser.add_argument("--device", type=int, default=0)  # 鏡頭
+    # parser.add_argument("--hand", type=int, default=1)  # 幾隻手
     parser.add_argument("--width", help='cap width', type=int, default=960)
     parser.add_argument("--height", help='cap height', type=int, default=540)
 
@@ -41,8 +42,15 @@ def get_args():
 def main():
     # Argument parsing #################################################################
     args = get_args()
-
-    cap_device = args.device
+    # Read setting.csv to get webcam , hands
+    with open('setting.csv',
+              encoding='utf-8-sig') as f:
+        custum_setting = csv.reader(f)
+        data = [i for i in custum_setting]
+        webcam = int(data[0][1])
+        hand = int(data[0][0])
+    ResetData.reset_setting()  # 清除使用者設定的手數量、鏡頭編號
+    cap_device = webcam
     cap_width = args.width
     cap_height = args.height
 
@@ -61,7 +69,7 @@ def main():
     mp_hands = mp.solutions.hands
     hands = mp_hands.Hands(
         static_image_mode=use_static_image_mode,
-        max_num_hands=1,
+        max_num_hands=hand,
         min_detection_confidence=min_detection_confidence,
         min_tracking_confidence=min_tracking_confidence,
     )
@@ -141,7 +149,7 @@ def main():
 
                 # Hand sign classification
                 hand_sign_id = keypoint_classifier(pre_processed_landmark_list)
-                if hand_sign_id == 0:  # Point gesture
+                if hand_sign_id == 0:  # Point gesture 記錄動態手勢
                     point_history.append(landmark_list[8])
                 else:
                     point_history.append([0, 0])

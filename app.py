@@ -12,23 +12,16 @@ import cv2 as cv
 import numpy as np
 import mediapipe as mp
 
-from utils import CvFpsCalc, Fun
+from utils import CvFpsCalc, Fun, ResetData
 from sp_model import KeyPointClassifier
 from sp_model import PointHistoryClassifier
-from PyQt5 import QtGui
-from PyQt5.QtWidgets import QWidget, QApplication, QLabel, QVBoxLayout
-from PyQt5.QtGui import QPixmap
-import sys
-import cv2
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QThread
-from mp_set import Ui_Form as dp
-
 
 
 def get_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--device", type=int, default=0)
+    # parser.add_argument("--device", type=int, default=0)  # 鏡頭
+    # parser.add_argument("--hand", type=int, default=1)  # 幾隻手
     parser.add_argument("--width", help='cap width', type=int, default=960)
     parser.add_argument("--height", help='cap height', type=int, default=540)
 
@@ -50,8 +43,15 @@ def get_args():
 def main():
     # Argument parsing #################################################################
     args = get_args()
-
-    cap_device = args.device
+    # Read setting.csv to get webcam , hands
+    with open('setting.csv',
+              encoding='utf-8-sig') as f:
+        custum_setting = csv.reader(f)
+        data = [i for i in custum_setting]
+        webcam = int(data[0][1])
+        hand = int(data[0][0])
+    ResetData.reset_setting()  # 清除使用者設定的手數量、鏡頭編號
+    cap_device = webcam
     cap_width = args.width
     cap_height = args.height
 
@@ -67,19 +67,10 @@ def main():
     cap.set(cv.CAP_PROP_FRAME_HEIGHT, cap_height)
 
     # Model load #############################################################
-    with open('setting.csv',
-              encoding='utf-8-sig') as f:
-        setting = csv.reader(f)
-        setting = [
-            row[0] for row in setting
-        ]
-    MH = int(setting[0])
-    WC = int(setting[1])
     mp_hands = mp.solutions.hands
-    globals.initialize()
     hands = mp_hands.Hands(
         static_image_mode=use_static_image_mode,
-        max_num_hands=MH,
+        max_num_hands=hand,
         min_detection_confidence=min_detection_confidence,
         min_tracking_confidence=min_tracking_confidence,
     )
@@ -126,7 +117,7 @@ def main():
         mode = select_mode(key, mode)
 
         # Camera capture #####################################################
-        ret, image = cap.read(WC)
+        ret, image = cap.read()
         if not ret:
             break
         image = cv.flip(image, 1)  # Mirror display
@@ -156,14 +147,30 @@ def main():
 
                 # Hand sign classification
                 hand_sign_id = keypoint_classifier(pre_processed_landmark_list)
-                if hand_sign_id == 2:  # Point gesture
-                    point_history.append(landmark_list[8])
-                elif hand_sign_id == 0:
+
+                if hand_sign_id == 0:
                     Fun.Up()
+                    print("up")
+                    time.sleep(0.5)
                 elif hand_sign_id == 1:
                     Fun.Down()
+                    print("down")
+                    time.sleep(0.5)
+                elif hand_sign_id == 2:
+                    Fun.Left()
+                    print("left")
+                    time.sleep(0.5)
+                elif hand_sign_id == 3:
+                    Fun.Right()
+                    print("right")
+                    time.sleep(0.5)
+                elif hand_sign_id == 4:
+                    Fun.EN_s()
+                    print("s")
+                    time.sleep(3)
                 else:
-                    point_history.append([0, 0])
+                    pass
+                    # point_history.append([0, 0])
 
                 # Finger gesture classification
                 finger_gesture_id = 0
@@ -194,7 +201,8 @@ def main():
         debug_image = draw_info(debug_image, fps, mode)
 
         # Screen reflection #############################################################
-        cv.imshow('Hand Gesture Recognition', debug_image)
+        # 不顯示畫面提升效率
+        # cv.imshow('Hand Gesture Recognition', debug_image)
 
     cap.release()
     cv.destroyAllWindows()

@@ -6,13 +6,22 @@ import csv
 import numpy as np
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
+from utils import CvFpsCalc, ResetData
 import os
+import csv
 dataset = 'sp_model/keypoint.csv'
 model_save_path = 'sp_model/keypoint_classifier.hdf5'
 tflite_save_path = 'sp_model/keypoint_classifier.tflite'
+# Read setting.csv to get NUM_CLASSES
+with open('setting.csv',
+          encoding='utf-8-sig') as f:
+    custum_setting = csv.reader(f)
+    data = [i for i in custum_setting]
+    n = int(data[0][0])
 
 RANDOM_SEED = 42
-NUM_CLASSES = 4  # accroding to how many gestures
+NUM_CLASSES = n  # accroding to how many gestures , setting by user
+
 X_dataset = np.loadtxt(dataset, delimiter=',',
                        dtype='float32', usecols=list(range(1, (21 * 2) + 1)))
 y_dataset = np.loadtxt(dataset, delimiter=',', dtype='int32', usecols=(0))
@@ -87,8 +96,9 @@ tflite_quantized_model = converter.convert()
 open(tflite_save_path, 'wb').write(tflite_quantized_model)
 
 
-print("ok")
-success = os.system("python msg.py")
+ResetData.reset_setting()  # 關閉前清除使用者設定的手數量、鏡頭編號
+print('訓練筆數快存刪除成功')
+success = os.system("python success_msg.py")
 success
 
 exit()

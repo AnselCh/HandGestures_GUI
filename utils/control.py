@@ -29,3 +29,7 @@ class Fun():
     def Space():
         space = pyautogui.press('space')
         return space
+
+    def EN_s():
+        s = pyautogui.press('s')
+        return s
