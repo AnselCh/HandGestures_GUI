@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+'''
+source code from : https://github.com/Kazuhito00/hand-gesture-recognition-using-mediapipe
+This project is modified by AnselCh on 2022.
+'''
 import csv
 import copy
 import argparse
